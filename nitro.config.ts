@@ -5,10 +5,6 @@ export default defineNitroConfig({
   preset: 'node_server',
   serverDir: './server',
 
-  devServer: {
-    port: 3001,
-  },
-
   builder: "rolldown",
 
   c8y: {
