@@ -2,6 +2,31 @@
 
 A starter template for building Cumulocity IoT microservices with [c8y-nitro](https://github.com/schplitt/c8y-nitro) powered by [nitro](https://v3.nitro.build/).
 
+## Quick Start
+
+The fastest way to get started with c8y-nitro is like this:
+
+```sh
+pnpm dlx giget@latest gh:schplitt/c8y-nitro-starter my-microservice
+cd my-microservice
+pnpm install
+```
+
+Configure your development tenant in `.env`:
+
+```sh
+C8Y_BASEURL=https://your-tenant.cumulocity.com
+C8Y_DEVELOPMENT_TENANT=t12345
+C8Y_DEVELOPMENT_USER=your-username
+C8Y_DEVELOPMENT_PASSWORD=your-password
+```
+
+Then start developing:
+
+```sh
+pnpm dev
+```
+
 ## Getting Started
 
 ### 1. Configure Environment
