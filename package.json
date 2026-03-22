@@ -27,8 +27,8 @@
     "roles": "c8y-nitro roles"
   },
   "dependencies": {
-    "c8y-nitro": "^0.1.2",
-    "nitro": "3.0.1-alpha.2"
+    "c8y-nitro": "latest",
+    "nitro": "latest"
   },
   "devDependencies": {
     "rolldown": "1.0.0-rc.2"
