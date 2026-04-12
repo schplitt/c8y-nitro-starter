@@ -9,6 +9,14 @@ export default defineNitroConfig({
 
   c8y: {
     // Configure c8y-nitro options here
+    manifest: {
+      roles: ['SOME_CUSTOM_ROLE', 'ANOTHER_ROLE'],
+      settings: [
+        { key: 'myOption', defaultValue: 'default' },
+        { key: 'credentials.secret', defaultValue: 'change-me' },
+      ],
+      requiredRoles: ['ROLE_OPTION_MANAGEMENT_READ'],
+    },
   },
 
   modules: [

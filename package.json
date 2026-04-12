@@ -2,6 +2,7 @@
   "name": "c8y-nitro-starter",
   "version": "1.0.0",
   "private": true,
+  "type": "module",
   "description": "Starter template for building Cumulocity IoT microservices with c8y-nitro",
   "author": {
     "name": "schplitt"
@@ -27,7 +28,7 @@
     "roles": "c8y-nitro roles"
   },
   "dependencies": {
-    "c8y-nitro": "latest",
+    "c8y-nitro": "^0.5.0",
     "nitro": "latest"
   },
   "devDependencies": {
