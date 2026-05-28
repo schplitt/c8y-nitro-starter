@@ -11,12 +11,6 @@
   "bugs": {
     "url": "https://github.com/schplitt/c8y-nitro-starter/issues"
   },
-  "exports": {
-    ".": {
-      "types": "./.output/types/index.d.mts",
-      "import": "./.output/server/index.mjs"
-    }
-  },
   "scripts": {
     "build": "nitro build",
     "dev": "nitro dev",
