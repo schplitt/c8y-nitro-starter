@@ -3,9 +3,8 @@ import c8y from 'c8y-nitro'
 
 export default defineNitroConfig({
   preset: 'node_server',
-  // serverDir defaults to './server' — set to './' so routes/, plugins/,
-  // and tasks/ live at the project root (same layout as the playground).
-  serverDir: './',
+  // Server code (routes/, plugins/, tasks/) lives under ./server — the Nitro default.
+  serverDir: './server',
 
   builder: 'rolldown',
 

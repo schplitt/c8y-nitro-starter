@@ -37,11 +37,13 @@ export default defineTask({
       //       operation, send an email, push a message to a queue, etc.
       console.log(`[notifications:send] → ${recipient}: ${message}`)
 
-      log.set({ status: 'sent' })
+      // Note: `status` is reserved by evlog for numeric HTTP status codes,
+      // so use a custom field (e.g. `outcome`) for task result state.
+      log.set({ outcome: 'sent' })
       return { result: 'sent' }
     }
     catch (err) {
-      log.set({ status: 'failed', error: String(err) })
+      log.set({ outcome: 'failed', error: String(err) })
       throw err
     }
     finally {

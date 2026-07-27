@@ -39,17 +39,18 @@ See the [auto-bootstrap guide](https://schplitt.github.io/c8y-nitro/guide/auto-b
 ## Project Structure
 
 ```
-routes/
-  user.get.ts                  # GET /user — current user via @c8y/client + structured logging
-  tenant-options.get.ts        # GET /tenant-options — read manifest settings at runtime
-  admin-only.ts                # GET /admin-only — role guard (object-syntax handler)
-  multi-role.ts                # GET /multi-role — OR-style multi-role guard
-  schedule-notification.get.ts # GET /schedule-notification — one-shot task scheduling
-plugins/
-  credentials-updated.ts       # Lifecycle hook: react when tenants subscribe/unsubscribe
-tasks/
-  notifications/
-    send.ts                    # Task "notifications:send" — background work unit
+server/                        # Server code root (nitro.config.ts → serverDir: './server')
+  routes/
+    user.get.ts                  # GET /user — current user via @c8y/client + structured logging
+    tenant-options.get.ts        # GET /tenant-options — read manifest settings at runtime
+    admin-only.ts                # GET /admin-only — role guard (object-syntax handler)
+    multi-role.ts                # GET /multi-role — OR-style multi-role guard
+    schedule-notification.get.ts # GET /schedule-notification — one-shot task scheduling
+  plugins/
+    credentials-updated.ts       # Lifecycle hook: react when tenants subscribe/unsubscribe
+  tasks/
+    notifications/
+      send.ts                    # Task "notifications:send" — background work unit
 index.html                     # Optional landing page (delete if API-only)
 nitro.config.ts                # Nitro + c8y-nitro configuration
 .env.example                   # Environment variable template
@@ -61,10 +62,10 @@ nitro.config.ts                # Nitro + c8y-nitro configuration
 
 ### Route handler
 
-Every `.ts` file under `routes/` becomes an HTTP endpoint. The file name encodes the HTTP method:
+Every `.ts` file under `server/routes/` becomes an HTTP endpoint. The file name encodes the HTTP method:
 
 ```ts
-// routes/hello.get.ts  →  GET /hello
+// server/routes/hello.get.ts  →  GET /hello
 import { defineEventHandler } from 'nitro/h3'
 import { useUserClient } from 'c8y-nitro/utils'
 
@@ -84,7 +85,7 @@ export default defineEventHandler(async (event) => {
 `defineHandler({ middleware, handler })` lets you attach middleware that runs before the handler. This is the recommended pattern for access control:
 
 ```ts
-// routes/admin-only.ts  →  GET /admin-only
+// server/routes/admin-only.ts  →  GET /admin-only
 import { defineHandler } from 'nitro/h3'
 import { hasUserRequiredRole } from 'c8y-nitro/utils'
 
@@ -157,13 +158,26 @@ throw createError({
 
 ### Tenant options
 
-Tenant options declared in the manifest `settings` array are readable at runtime via `useTenantOption()`. Results are cached (TTL configurable per key):
+Tenant options declared in the manifest `settings` array are readable at runtime. Since **0.7.0** the API is client-first: pass a Cumulocity client (which selects the target tenant) and get back a handle to read/write. Reads are cached (TTL configurable per key):
 
 ```ts
-import { useTenantOption } from 'c8y-nitro/utils'
+import { useDeployedTenantClient, useTenantOption } from 'c8y-nitro/utils'
 
-const value = await useTenantOption('myOption')
-const secret = await useTenantOption('credentials.secret') // decrypted automatically
+// The client determines which tenant is targeted:
+//   useDeployedTenantClient()      → the microservice owner tenant
+//   useUserTenantClient(event)     → the current request's tenant (multi-tenant)
+const client = await useDeployedTenantClient()
+
+const value = await useTenantOption(client, 'myOption').read()
+const secret = await useTenantOption(client, 'credentials.secret').read() // decrypted automatically
+
+// The handle also supports writes:
+await useTenantOption(client, 'myOption').set('new-value')
+const token = await useTenantOption(client, 'credentials.secret').getOrInsert('')
+
+// Or operate on a whole settings category:
+import { useTenantOptions } from 'c8y-nitro/utils'
+const all = await useTenantOptions(client).list()
 ```
 
 > Docs: [Tenant options guide](https://schplitt.github.io/c8y-nitro/guide/tenant-options)
@@ -172,16 +186,16 @@ const secret = await useTenantOption('credentials.secret') // decrypted automati
 
 ### Nitro plugins — lifecycle hooks
 
-Files under `plugins/` run once at server startup. Register c8y-nitro lifecycle hooks here:
+Files under `server/plugins/` run once at server startup. Register c8y-nitro lifecycle hooks here:
 
 ```ts
-// plugins/credentials-updated.ts
-import type { TenantCredentials } from 'c8y-nitro/types'
+// server/plugins/credentials-updated.ts
 import { definePlugin } from 'nitro'
 
 export default definePlugin((nitroApp) => {
   // Fired whenever subscribed tenants change (new subscription or unsubscribe).
-  nitroApp.hooks.hook('c8y:tenantCredentialsUpdated', (prev: TenantCredentials | null, next: TenantCredentials) => {
+  // `prev`/`next` are auto-typed as TenantCredentials via c8y-nitro's hook augmentation.
+  nitroApp.hooks.hook('c8y:tenantCredentialsUpdated', (prev, next) => {
     const added = Object.keys(next).filter((t) => !prev || !(t in prev))
     console.log('New tenants:', added)
     // TODO: provision per-tenant resources, warm caches …
@@ -195,9 +209,9 @@ export default definePlugin((nitroApp) => {
 
 ### Tasks and scheduling
 
-Tasks are standalone work units under `tasks/`. Enable them with `experimental: { tasks: true }` in `nitro.config.ts`.
+Tasks are standalone work units under `server/tasks/`. Enable them with `experimental: { tasks: true }` in `nitro.config.ts`.
 
-**Define a task** (`tasks/notifications/send.ts` → name `"notifications:send"`):
+**Define a task** (`server/tasks/notifications/send.ts` → name `"notifications:send"`):
 
 ```ts
 import { defineTask } from 'nitro/task'

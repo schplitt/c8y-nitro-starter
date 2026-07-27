@@ -15,11 +15,12 @@
  *
  * Docs: https://schplitt.github.io/c8y-nitro/reference/runtime-hooks
  */
-import type { TenantCredentials } from 'c8y-nitro/types'
 import { definePlugin } from 'nitro'
 
 export default definePlugin((nitroApp) => {
-  nitroApp.hooks.hook('c8y:tenantCredentialsUpdated', (prev: TenantCredentials | null, next: TenantCredentials) => {
+  // `prev` and `next` are typed as `TenantCredentials | null` / `TenantCredentials`
+  // automatically — c8y-nitro augments Nitro's NitroRuntimeHooks for this hook.
+  nitroApp.hooks.hook('c8y:tenantCredentialsUpdated', (prev, next) => {
     const added = Object.keys(next).filter((t) => !prev || !(t in prev))
     const removed = prev ? Object.keys(prev).filter((t) => !(t in next)) : []
 
