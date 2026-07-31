@@ -9,11 +9,12 @@ export default defineNitroConfig({
   builder: 'rolldown',
 
   experimental: {
-    // Required to use Nitro tasks and scheduleTask() from c8y-nitro/utils.
-    tasks: true,
     // Enables async_hooks-based context propagation so helpers like useLogger()
     // can reach the current request from deeply nested call stacks.
     asyncContext: true,
+    // Note: c8y-nitro's task registry (c8yTasks) does its own runtime cron
+    // scheduling and does NOT need `tasks: true`. Only enable Nitro's native
+    // task system if you also use build-time `scheduledTasks`.
   },
 
   c8y: {

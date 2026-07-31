@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       c8y-nitro:
-        specifier: ^0.7.0
-        version: 0.7.0(@c8y/client@1023.22.6)(chokidar@5.0.0)(dotenv@17.2.3)(giget@2.0.0)(jiti@2.6.1)(nitro@3.0.260429-beta(chokidar@5.0.0)(dotenv@17.2.3)(giget@2.0.0)(jiti@2.6.1))(ofetch@2.0.0-alpha.3)
+        specifier: ^0.8.0
+        version: 0.8.0(@c8y/client@1023.22.6)(chokidar@5.0.0)(dotenv@17.2.3)(giget@2.0.0)(jiti@2.6.1)(nitro@3.0.260429-beta(chokidar@5.0.0)(dotenv@17.2.3)(giget@2.0.0)(jiti@2.6.1))(ofetch@2.0.0-alpha.3)
       nitro:
         specifier: 3.0.260429-beta
         version: 3.0.260429-beta(chokidar@5.0.0)(dotenv@17.2.3)(giget@2.0.0)(jiti@2.6.1)
@@ -187,8 +187,8 @@ packages:
       magicast:
         optional: true
 
-  c8y-nitro@0.7.0:
-    resolution: {integrity: sha512-1XvE2C3e4BgzcAIM8EN6qMbghm8bEGKzgD0zN22a2oN/7tPaSRVaWpuH8NkMxIzwakG3U05ap4/nUVfw9UVPAQ==}
+  c8y-nitro@0.8.0:
+    resolution: {integrity: sha512-LLLInGRZJ4ga7RerM2DLFuv6wrHP4C4HpxeIpM8LPebEaEvVIzew7UkbXPU2Sk9ZcD4dT68m2bni3fZub9eIAA==}
     engines: {node: '>=24.0.0'}
     hasBin: true
     peerDependencies:
@@ -242,6 +242,10 @@ packages:
 
   core-util-is@1.0.3:
     resolution: {integrity: sha512-ZQBvi1DcpJ4GDqanjucZ2Hj3wEO5pZDS89BWbkcrvdxksJorwUDDZamX9ldFkp9aw2lmBDLgkObEA4DWNJ9FYQ==}
+
+  croner@10.0.1:
+    resolution: {integrity: sha512-ixNtAJndqh173VQ4KodSdJEI6nuioBWI0V1ITNKhZZsO0pEMoDxz539T4FTTbSZ/xIOSuDnzxLVRqBVSvPNE2g==}
+    engines: {node: '>=18.0'}
 
   cross-fetch@4.1.0:
     resolution: {integrity: sha512-uKm5PU+MHTootlWEY+mZ4vvXoCn4fLQxT9dSc1sXVMSFkINTJVN8cAQROpwcKm8bJ/c7rgZVIBWzH5T78sNZZw==}
@@ -462,9 +466,6 @@ packages:
     peerDependencies:
       cometd: '>= 3.1.4'
       cometd-nodejs-client: '>= 1.0.2'
-
-  itty-time@2.0.2:
-    resolution: {integrity: sha512-95U9Xo3Qggz/e82ewZQJw8x76HgiMvbrijzoPy6nCTae4FZEwbcVJgrB57Kvddf8Q5pQdgJKTX6euFJpDr6Low==}
 
   jiti@2.6.1:
     resolution: {integrity: sha512-ekilCSN1jwRvIbgeg/57YFh8qQDNbwDb9xT/qu2DAHbFFZUicIl4ygVaAvzveMhMVr3LnpSKTNnwt8PoOfmKhQ==}
@@ -849,14 +850,14 @@ snapshots:
       giget: 2.0.0
       jiti: 2.6.1
 
-  c8y-nitro@0.7.0(@c8y/client@1023.22.6)(chokidar@5.0.0)(dotenv@17.2.3)(giget@2.0.0)(jiti@2.6.1)(nitro@3.0.260429-beta(chokidar@5.0.0)(dotenv@17.2.3)(giget@2.0.0)(jiti@2.6.1))(ofetch@2.0.0-alpha.3):
+  c8y-nitro@0.8.0(@c8y/client@1023.22.6)(chokidar@5.0.0)(dotenv@17.2.3)(giget@2.0.0)(jiti@2.6.1)(nitro@3.0.260429-beta(chokidar@5.0.0)(dotenv@17.2.3)(giget@2.0.0)(jiti@2.6.1))(ofetch@2.0.0-alpha.3):
     dependencies:
       '@c8y/client': 1023.22.6
       c12: 4.0.0-beta.5(chokidar@5.0.0)(dotenv@17.2.3)(giget@2.0.0)(jiti@2.6.1)
       citty: 0.2.2
       consola: 3.4.2
+      croner: 10.0.1
       evlog: 2.22.3(nitro@3.0.260429-beta(chokidar@5.0.0)(dotenv@17.2.3)(giget@2.0.0)(jiti@2.6.1))(ofetch@2.0.0-alpha.3)
-      itty-time: 2.0.2
       jszip: 3.10.1
       nitro: 3.0.260429-beta(chokidar@5.0.0)(dotenv@17.2.3)(giget@2.0.0)(jiti@2.6.1)
       pathe: 2.0.3
@@ -933,6 +934,8 @@ snapshots:
   consola@3.4.2: {}
 
   core-util-is@1.0.3: {}
+
+  croner@10.0.1: {}
 
   cross-fetch@4.1.0:
     dependencies:
@@ -1065,8 +1068,6 @@ snapshots:
     dependencies:
       cometd: 4.0.8
       cometd-nodejs-client: 1.0.2
-
-  itty-time@2.0.2: {}
 
   jiti@2.6.1:
     optional: true
