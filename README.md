@@ -45,12 +45,12 @@ server/                        # Server code root (nitro.config.ts → serverDir
     tenant-options.get.ts        # GET /tenant-options — read manifest settings at runtime
     admin-only.ts                # GET /admin-only — role guard (object-syntax handler)
     multi-role.ts                # GET /multi-role — OR-style multi-role guard
-    schedule-notification.get.ts # GET /schedule-notification — one-shot task scheduling
+    schedule-notification.get.ts # GET /schedule-notification — schedule a one-shot job
+    jobs.get.ts                  # GET /jobs — list/cancel scheduled jobs
   plugins/
     credentials-updated.ts       # Lifecycle hook: react when tenants subscribe/unsubscribe
-  tasks/
-    notifications/
-      send.ts                    # Task "notifications:send" — background work unit
+    schedule-jobs.ts             # Re-seed recurring jobs at boot (heartbeat)
+  tasks.ts                       # c8yTasks() registry — tasks + runtime job scheduling
 index.html                     # Optional landing page (delete if API-only)
 nitro.config.ts                # Nitro + c8y-nitro configuration
 .env.example                   # Environment variable template
@@ -209,38 +209,49 @@ export default definePlugin((nitroApp) => {
 
 ### Tasks and scheduling
 
-Tasks are standalone work units under `server/tasks/`. Enable them with `experimental: { tasks: true }` in `nitro.config.ts`.
+c8y-nitro ships its own **runtime** task registry, `c8yTasks()`. You register
+functions once (**tasks**) and schedule named instances of them (**jobs**) that
+run now, once in the future, or repeatedly on a cron — all decided at runtime.
+It uses its own cron engine, so no `experimental: { tasks: true }` is required.
 
-**Define a task** (`server/tasks/notifications/send.ts` → name `"notifications:send"`):
+**Build a registry** (`server/tasks.ts`) — each `createTask()` widens the type,
+so `scheduleJob()`/`run()` autocomplete task names and reject typos:
 
 ```ts
-import { defineTask } from 'nitro/task'
-import { createLogger } from 'c8y-nitro/utils'
+import type { TaskEvent } from 'c8y-nitro/utils'
+import { c8yTasks } from 'c8y-nitro/utils'
 
-export default defineTask({
-  meta: { name: 'notifications:send', description: 'Send a notification' },
-  async run({ payload }) {
-    const log = createLogger()
-    // ... do work ...
-    log.emit() // always emit in background tasks
-    return { result: 'done' }
-  },
-})
+export const tasks = c8yTasks()
+  .createTask('send-notification', async (event: TaskEvent<{ recipient: string, message: string }>) => {
+    // resolve live state from ids in the payload, then do the work
+  })
 ```
 
-**Schedule a task** from a route:
+**Schedule a job** from a route or plugin (import the singleton):
 
 ```ts
-import { scheduleTask } from 'c8y-nitro/utils'
+import { tasks } from '../tasks'
 
-// number = seconds from now | string = "5 minutes" | Date = exact time
-await scheduleTask('notifications:send', {
+// once, N seconds from now — { at: Date | ISO } or { cron: '…' } also work
+tasks.scheduleJob({
+  name: 'welcome-notification',
+  task: 'send-notification',
   payload: { recipient: 'admin', message: 'Hello!' },
-  schedule: 30,
+  schedule: { in: 30 },
+  replace: true,
 })
+
+tasks.run('send-notification', { payload: { recipient: 'admin', message: 'now' } }) // run ad-hoc
+tasks.listJobs() // inspect · triggerJob(name) · cancelJob(name)
 ```
 
-> Docs: [Scheduled tasks guide](https://schplitt.github.io/c8y-nitro/guide/scheduled-tasks)
+Recurring jobs (`{ cron }`) evaluate in UTC by default (pass a `timezone`), and
+support `immediate`, `maxRuns`, and `concurrency: 'single' | 'parallel'`.
+
+> **Jobs live in memory** — a restart clears them. Re-seed recurring jobs from a
+> boot plugin (see `server/plugins/schedule-jobs.ts`).
+
+> Docs: [Tasks & scheduling guide](https://schplitt.github.io/c8y-nitro/guide/scheduled-tasks)
 
 ---
 
