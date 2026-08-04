@@ -6,11 +6,32 @@ A starter template for building [Cumulocity IoT](https://cumulocity.com/) micros
 
 ## Quick Start
 
+Scaffold a new project with [create-c8y-nitro](https://github.com/schplitt/create-c8y-nitro):
+
+```sh
+pnpm create c8y-nitro my-microservice
+# or
+npm create c8y-nitro@latest my-microservice
+```
+
+This downloads the template, sets up `package.json` for your project (`name` derived from the directory, `version` reset, template metadata stripped), initializes git, and installs dependencies.
+
+```sh
+cd my-microservice
+```
+
+<details>
+<summary>Manual alternative: plain <code>giget</code> clone</summary>
+
 ```sh
 pnpm dlx giget@latest gh:schplitt/c8y-nitro-starter my-microservice
 cd my-microservice
 pnpm install
 ```
+
+Note: this copies the template verbatim — you'll need to adjust `package.json` (name, version, author, …) yourself.
+
+</details>
 
 Copy `.env.example` to `.env` and fill in your development tenant credentials:
 
@@ -271,6 +292,7 @@ support `immediate`, `maxRuns`, and `concurrency: 'single' | 'parallel'`.
 
 | Resource | Link |
 |---|---|
+| create-c8y-nitro (scaffolding CLI) | [github.com/schplitt/create-c8y-nitro](https://github.com/schplitt/create-c8y-nitro) |
 | c8y-nitro docs | [schplitt.github.io/c8y-nitro](https://schplitt.github.io/c8y-nitro/) |
 | What is c8y-nitro? | [/guide/what-is-c8y-nitro](https://schplitt.github.io/c8y-nitro/guide/what-is-c8y-nitro) |
 | Configuration reference | [/reference/module-options](https://schplitt.github.io/c8y-nitro/reference/module-options) |
