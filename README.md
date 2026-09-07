@@ -285,7 +285,7 @@ support `immediate`, `maxRuns`, and `concurrency: 'single' | 'parallel'`.
 | `pnpm preview` | Preview the production build locally |
 | `pnpm bootstrap` | Manually run the bootstrap flow |
 | `pnpm roles` | Manage development user roles |
-| `pnpm typegen` | Generate Nitro types (run after changing config) |
+| `pnpm typegen` | Generate c8y-nitro types (run after changing the manifest, or before typechecking a fresh checkout) |
 | `pnpm typecheck` | TypeScript type check |
 
 ## Learn More
