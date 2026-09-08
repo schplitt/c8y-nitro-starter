@@ -1,5 +1,5 @@
 /**
- * GET /tenant-options
+ * GET /api/tenant-options
  *
  * Reads tenant options that were declared in the manifest `settings` array
  * inside nitro.config.ts.

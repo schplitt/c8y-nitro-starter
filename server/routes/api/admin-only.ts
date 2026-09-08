@@ -1,5 +1,5 @@
 /**
- * GET /admin-only
+ * GET /api/admin-only
  *
  * Demonstrates the object-syntax handler with per-route middleware.
  *

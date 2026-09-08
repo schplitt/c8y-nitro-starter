@@ -1,5 +1,5 @@
 /**
- * GET /schedule-notification?delay=30
+ * GET /api/schedule-notification?delay=30
  *
  * Schedules a one-shot job that runs the "send-notification" task once in the
  * future, using the c8y-nitro task registry (see server/tasks.ts).
@@ -15,7 +15,7 @@
  * Docs: https://schplitt.github.io/c8y-nitro/guide/scheduled-tasks
  */
 import { defineEventHandler, getQuery } from 'nitro/h3'
-import { tasks } from '../tasks'
+import { tasks } from '../../tasks'
 
 export default defineEventHandler((event) => {
   const query = getQuery(event)
