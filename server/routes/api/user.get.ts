@@ -1,5 +1,5 @@
 /**
- * GET /user
+ * GET /api/user
  *
  * Returns the currently authenticated Cumulocity user.
  *

@@ -1,5 +1,5 @@
 /**
- * GET /multi-role
+ * GET /api/multi-role
  *
  * Route accessible to users that have ANY ONE of the listed roles.
  * Useful when both an admin and a read-only role should be allowed in.

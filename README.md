@@ -62,12 +62,14 @@ See the [auto-bootstrap guide](https://schplitt.github.io/c8y-nitro/guide/auto-b
 ```
 server/                        # Server code root (nitro.config.ts → serverDir: './server')
   routes/
-    user.get.ts                  # GET /user — current user via @c8y/client + structured logging
-    tenant-options.get.ts        # GET /tenant-options — read manifest settings at runtime
-    admin-only.ts                # GET /admin-only — role guard (object-syntax handler)
-    multi-role.ts                # GET /multi-role — OR-style multi-role guard
-    schedule-notification.get.ts # GET /schedule-notification — schedule a one-shot job
-    jobs.get.ts                  # GET /jobs — list/cancel scheduled jobs
+    api/                         # Nested dirs become path segments → /api/*
+      user.get.ts                  # GET /api/user — current user via @c8y/client + structured logging
+      config.get.ts                # GET /api/config — non-secret runtime config for index.html
+      tenant-options.get.ts        # GET /api/tenant-options — read manifest settings at runtime
+      admin-only.ts                # GET /api/admin-only — role guard (object-syntax handler)
+      multi-role.ts                # GET /api/multi-role — OR-style multi-role guard
+      schedule-notification.get.ts # GET /api/schedule-notification — schedule a one-shot job
+      jobs.get.ts                  # GET /api/jobs — list/cancel scheduled jobs
   plugins/
     credentials-updated.ts       # Lifecycle hook: react when tenants subscribe/unsubscribe
     schedule-jobs.ts             # Re-seed recurring jobs at boot (heartbeat)
@@ -83,10 +85,10 @@ nitro.config.ts                # Nitro + c8y-nitro configuration
 
 ### Route handler
 
-Every `.ts` file under `server/routes/` becomes an HTTP endpoint. The file name encodes the HTTP method:
+Every `.ts` file under `server/routes/` becomes an HTTP endpoint. Subdirectories become path segments, and the file name encodes the HTTP method:
 
 ```ts
-// server/routes/hello.get.ts  →  GET /hello
+// server/routes/api/hello.get.ts  →  GET /api/hello
 import { defineEventHandler } from 'nitro/h3'
 import { useUserClient } from 'c8y-nitro/utils'
 
@@ -106,7 +108,7 @@ export default defineEventHandler(async (event) => {
 `defineHandler({ middleware, handler })` lets you attach middleware that runs before the handler. This is the recommended pattern for access control:
 
 ```ts
-// server/routes/admin-only.ts  →  GET /admin-only
+// server/routes/api/admin-only.ts  →  GET /api/admin-only
 import { defineHandler } from 'nitro/h3'
 import { hasUserRequiredRole } from 'c8y-nitro/utils'
 
