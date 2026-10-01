@@ -77,6 +77,7 @@ server/                        # Server code root (nitro.config.ts → serverDir
 index.html                     # Optional landing page (delete if API-only)
 nitro.config.ts                # Nitro + c8y-nitro configuration
 .env.example                   # Environment variable template
+AGENTS.md                      # Instructions + doc links for AI coding agents
 ```
 
 ---
