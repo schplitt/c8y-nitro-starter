@@ -77,7 +77,7 @@ This section captures project-specific knowledge, tool quirks and lessons learne
 
 ### Tools & Dependencies
 
-- `nitro` is pinned to an exact beta that must match `c8y-nitro`'s peer dependency. Bump both together.
+- `nitro` is pinned to an exact version that must match `c8y-nitro`'s peer dependency. Bump both together.
 - `nitro prepare` is gone. Use `pnpm typegen`.
 
 ### Patterns & Conventions
