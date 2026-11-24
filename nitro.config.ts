@@ -1,7 +1,7 @@
-import { defineNitroConfig } from 'nitro/config'
+import { defineConfig } from 'nitro'
 import c8y from 'c8y-nitro'
 
-export default defineNitroConfig({
+export default defineConfig({
   preset: 'node_server',
   // Server code (routes/, plugins/, tasks/) lives under ./server — the Nitro default.
   serverDir: './server',
